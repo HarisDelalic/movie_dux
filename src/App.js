@@ -11,12 +11,18 @@ import {useEffect, useState} from "react";
 
 function App() {
     const [movies, setMovies] = useState([]);
+    const [watchlist, setWatchlist] = useState([1,2,3]);
 
     useEffect(() => {
         fetch("movies.json").then(response => response.json()).then(m => {
             setMovies(m);
         })
     }, [])
+
+    const toggleWatchlist = (movieId) => {
+        // eslint-disable-next-line no-unused-expressions
+        setWatchlist((prevState) => { prevState.includes(movieId) ? prevState.filter(id => id !== movieId) : [...prevState, movieId] })
+    }
 
     return (
         <div className="App">
@@ -37,8 +43,8 @@ function App() {
 
                     </nav>
                     <Routes>
-                        <Route path="/" element={<MoviesGrid movies = {movies}/>}></Route>
-                        <Route path="/watchlist" element={<Watchlist/>}></Route>
+                        <Route path="/" element={<MoviesGrid movies = {movies} watchlist = {watchlist} toggleWatchlist={toggleWatchlist}/>}></Route>
+                        <Route path="/watchlist" element={<Watchlist  movies = {movies} watchlist = {watchlist} toggleWatchlist={toggleWatchlist}/>}></Route>
                     </Routes>
                 </Router>
             </div>
